@@ -3,28 +3,4 @@ description: "Smart-Home Projekte, ESPHome, Home Assistant und Automatisierungen
 baseurl: "" 
 url: "https://github.com/schu-r/homeautomation"
 
-theme: minima
 
-markdown: kramdown
-highlighter: rouge
-
-author:
-  name: "Roland Schuller"
-
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-
-permalink: /:categories/:title/
-
-defaults:
-  - scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: "post"
-
-exclude:
-  - README.md
-  - Gemfile
-  - Gemfile.lock
