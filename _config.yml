@@ -1,7 +1,7 @@
 title: "Rolands Homeautomation"
 description: "Smart-Home Projekte, ESPHome, Home Assistant und Automatisierungen."
 baseurl: "" 
-url: "https://USERNAME.github.io/roland-homeautomation"
+url: "https://github.com/schu-r/homeautomation"
 
 theme: minima
 
@@ -9,8 +9,7 @@ markdown: kramdown
 highlighter: rouge
 
 author:
-  name: "Roland"
-  email: ""
+  name: "Roland Schuller"
 
 plugins:
   - jekyll-feed
