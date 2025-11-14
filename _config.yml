@@ -1,0 +1,31 @@
+title: "Rolands Homeautomation"
+description: "Smart-Home Projekte, ESPHome, Home Assistant und Automatisierungen."
+baseurl: "" 
+url: "https://USERNAME.github.io/roland-homeautomation"
+
+theme: minima
+
+markdown: kramdown
+highlighter: rouge
+
+author:
+  name: "Roland"
+  email: ""
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+permalink: /:categories/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
