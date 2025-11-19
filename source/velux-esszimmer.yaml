@@ -1,0 +1,238 @@
+esphome:
+  name: velux-esszimmer
+
+esp32:
+  board: esp32dev
+
+api:
+
+logger:
+ 
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  
+ota:
+  platform: esphome
+
+web_server:
+    port: 80
+    version: 3
+
+button:
+  - platform: restart
+    name: "Restart"
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    update_interval: 60s
+
+
+  - platform: uptime
+    name: Uptime Sensor
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: ESP IP Address
+    ssid:
+      name: ESP Connected SSID
+    bssid:
+      name: ESP Connected BSSID
+    mac_address:
+      name: ESP Mac Wifi Address
+    scan_results:
+      name: ESP Latest Scan Results
+
+binary_sensor:
+- platform: gpio
+  name: "Beschattung_runter"
+  pin:
+    number: GPIO16
+    inverted: true
+    mode:
+        input: true
+        pullup: true
+  id: beschattung_down
+  filters:
+      - delayed_on: 30ms
+  on_press:
+    then:
+      - lambda: |
+          if (id(cover_beschattung).current_operation == COVER_OPERATION_IDLE) {
+              auto call = id(cover_beschattung).make_call();
+              call.set_command_close();
+              call.perform();
+          } else {
+              auto call = id(cover_beschattung).make_call();
+              call.set_command_stop();
+              call.perform();
+          }
+
+- platform: gpio
+  name: "beschattung_rauf"
+  pin:
+    number: GPIO17
+    inverted: true
+    mode:
+        input: true
+        pullup: true
+  id: beschattung_up
+  filters:
+      - delayed_on: 30ms
+  on_press:
+    then:
+      - lambda: |
+          if (id(cover_beschattung).current_operation == COVER_OPERATION_IDLE) {
+              auto call = id(cover_beschattung).make_call();
+              call.set_command_open();
+              call.perform();
+          } else {
+              auto call = id(cover_beschattung).make_call();
+              call.set_command_stop();
+              call.perform();
+          }
+  
+
+- platform: gpio
+  name: "Fenster_auf"
+  pin:
+    number: GPIO19
+    inverted: true
+    mode:
+        input: true
+        pullup: true
+  id: fenster_auf
+  filters:
+      - delayed_on: 30ms
+  on_press:
+    then:
+      - lambda: |
+          if (id(cover_fenster).current_operation == COVER_OPERATION_IDLE) {
+              auto call = id(cover_fenster).make_call();
+              call.set_command_open();
+              call.perform();
+          } else {
+              auto call = id(cover_fenster).make_call();
+              call.set_command_stop();
+              call.perform();
+          }
+- platform: gpio
+  name: "Fenster_zu"
+  pin:
+    number: GPIO21
+    inverted: true
+    mode:
+        input: true
+        pullup: true
+  id: fenster_zu
+  filters:
+      - delayed_on: 30ms
+  on_press:
+    then:
+      - lambda: |
+          if (id(cover_fenster).current_operation == COVER_OPERATION_IDLE) {
+              auto call = id(cover_fenster).make_call();
+              call.set_command_open();
+              call.perform();
+          } else {
+              auto call = id(cover_fenster).make_call();
+              call.set_command_stop();
+              call.perform();
+          }
+
+
+- platform: gpio
+  name: "Regensensor"
+  pin:
+    number: GPIO22
+    inverted: true
+    mode:
+      input: true
+      pullup: true
+  id: regensensor
+  filters:
+      - delayed_on: 30ms
+  on_press:
+    then:
+      - lambda: |
+            auto call2 = id(cover_fenster).make_call();
+            call2.set_command_close();
+            call2.perform();
+            
+
+
+
+
+switch:
+- platform: gpio
+  pin: GPIO27
+  id: wurzel
+  inverted: yes
+  restore_mode: ALWAYS_OFF
+- platform: gpio
+  pin: GPIO26
+  id: direction
+  inverted: yes
+  restore_mode: ALWAYS_OFF
+- platform: gpio
+  pin: GPIO25
+  id: beschattung
+  inverted: yes
+  restore_mode: ALWAYS_OFF
+- platform: gpio
+  pin: GPIO33
+  id: fenster
+  inverted: yes
+  restore_mode: ALWAYS_OFF
+
+
+cover:
+- platform: time_based
+  name: "Beschattung"
+  id: cover_beschattung
+  open_action:
+    - cover.stop: cover_fenster
+    - switch.turn_on: wurzel
+    - switch.turn_off: direction
+    - switch.turn_on: beschattung
+    - switch.turn_off: fenster
+  open_duration: 46s
+  close_action:
+    - cover.stop: cover_fenster
+    - switch.turn_off: wurzel
+    - switch.turn_on: direction
+    - switch.turn_on: beschattung
+    - switch.turn_off: fenster
+  close_duration: 45s
+  stop_action:
+    - switch.turn_off: wurzel
+    - switch.turn_off: direction
+    - switch.turn_off: beschattung
+    - switch.turn_off: fenster
+
+- platform: time_based
+  name: "Fenster"
+  id: cover_fenster
+  open_action:
+    - cover.stop: cover_beschattung
+    - switch.turn_on: wurzel
+    - switch.turn_off: direction
+    - switch.turn_off: beschattung
+    - switch.turn_on: fenster
+  open_duration: 30s
+  close_action:
+    - cover.stop: cover_beschattung
+    - switch.turn_off: wurzel
+    - switch.turn_on: direction
+    - switch.turn_off: beschattung
+    - switch.turn_on: fenster
+  close_duration: 31s
+  stop_action:
+    - switch.turn_off: wurzel
+    - switch.turn_off: direction
+    - switch.turn_off: beschattung
+    - switch.turn_off: fenster
+
