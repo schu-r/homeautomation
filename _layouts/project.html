@@ -87,7 +87,7 @@
       <h3>Sourcecode</h3>
       <ul>
         {% for file in page.code_files %}
-          <li><a href="{{ file.path }}">{{ file.name }}</a></li>
+          <li><a href="{{ file.path }}" target="_new">{{ file.name }}</a></li>
         {% endfor %}
       </ul>
       {% endif %}
