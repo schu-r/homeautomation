@@ -65,6 +65,66 @@
         margin-bottom: 1.5rem;
         border-radius: 6px;
         }
+
+    /* Mobile Layout Optimierung */
+@media (max-width: 850px) {
+  header {
+    padding: 2rem 1rem;
+  }
+
+  header h1 {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  .layout {
+    display: block;        /* Grid weg, alles untereinander */
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+  }
+
+  nav {
+    position: relative;    /* sticky macht mobil oft Probleme */
+    top: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  main {
+    padding: 1.2rem;
+  }
+
+  .summary {
+    font-size: 0.95rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  nav h3 {
+    font-size: 1.1rem;
+  }
+
+  nav ul li {
+    margin-bottom: 0.6rem;
+  }
+
+  footer {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Extra-small Phones */
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.55rem;
+  }
+
+  main {
+    padding: 1rem;
+  }
+}
   </style>
 </head>
 <body>
