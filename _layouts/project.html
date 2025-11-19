@@ -82,7 +82,7 @@
         {% endfor %}
       </ul>
       {% endif %}
-      {% if code_files %}
+      {% if page.code_files %}
       <hr>
       <h3>Sourcecode</h3>
       <ul>
@@ -99,12 +99,10 @@
         <p>{{ page.summary | markdownify }}</p>
       </div>
 
-      {% if page.description %}
       <div class="description">
       {{ content }}
       </div>
-      {% endif %}
-
+     
       <a href="../index.html" class="back-link">Zurück zur Hauptseite</a>
     </main>
   </div>
