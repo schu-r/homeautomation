@@ -1,8 +1,5 @@
 title: "Rolands Homeautomation"
 description: "Smart-Home Projekte, ESPHome, Home Assistant und Automatisierungen."
 baseurl: "" 
-url: "https://github.com/schu-r/homeautomation"
+url: "https://schu-r.github.io/homeautomation"
 markdown: kramdown
-
-
-
