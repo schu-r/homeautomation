@@ -4,8 +4,8 @@ title: "HomeAssistant – Das Herz meines Smart Homes"
 header_image: "/images/home-assistant-wordmark-color-on-light.webp"
 summary: "Ich nutze [HomeAssistant](https://www.home-assistant.io/) in meinem Haus, um alles zu steuern – flexibel, Open Source und lokal. Sensoren, Licht, Heizung: alles vernetzt, alles unter meiner Kontrolle. Mehr dazu auf meiner Seite! #HomeAutomation #OpenSource #SmartHome"
 
-description: |
-  # HomeAssistant – Das Herz meines Smart Homes
+---
+# HomeAssistant – Das Herz meines Smart Homes
 
 Ich verwende in meinem Haus den [HomeAssistant](https://www.home-assistant.io/). Warum? Als ich mein Haus gebaut habe, war Homeautomation noch kein Standard, und KNX oder ähnliche Systeme waren für mich schlicht zu teuer. Deshalb habe ich damals keine speziellen Leitungen verlegt.  
 
@@ -19,4 +19,4 @@ Ich schätze besonders die Philosophie hinter HomeAssistant und Open-Source-Soft
 
 Für mich ist HomeAssistant mehr als Software – es ist die Plattform, auf der meine Projekte entstehen, wachsen und miteinander kommunizieren. Jeder Sensor, jede Automation, jedes kleine Experiment fügt sich hier zusammen und macht mein Zuhause smarter.
 
----
+
