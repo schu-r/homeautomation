@@ -21,7 +21,7 @@ Pellets, Solarthermie und eine PV-Anlage. Eigentlich ein solides Setup, aber mei
 - Warmwasserbereitung über ein Frischwassermodul  
 - Zwei vollständig getrennte Heizkreise (oben Fußbodenheizung, unten Heizkörper)
 
-![Firma Veigl](../images/veigl-logo.png)
+![Firma Veigl](https://bad-veigl.at/wp-content/uploads/2019/07/veigl-logo.png)
 [https://bad-veigl.at/](https://bad-veigl.at/)
 
 Damit das alles sinnvoll zusammenspielt, brauchte ich einen Installateur, der sowohl meine technischen Anforderungen als auch meine Automatisierungsziele versteht. Mit der Firma Veigl habe ich genau diesen Partner gefunden. Ich wusste vorher nicht, wie viele Funktionen ein moderner Puffer tatsächlich mitbringt – und warum man sie gezielt einsetzen sollte. Nach einem intensiven Austausch einigten wir uns auf eine klare Aufteilung:
