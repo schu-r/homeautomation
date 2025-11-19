@@ -6,9 +6,9 @@
   <title>{{ title }}</title>
 
   <!-- Social Media Preview -->
-  <meta property="og:title" content="{{ title }}" />
-  <meta property="og:description" content="{{ summary }}" />
-  <meta property="og:image" content="{{ header_image }}" />
+  <meta property="og:title" content="{{ page.title }}" />
+  <meta property="og:description" content="{{ page.summary }}" />
+  <meta property="og:image" content="{{ page.header_image }}" />
   <meta property="og:type" content="article" />
 
   <style>
@@ -19,7 +19,7 @@
       color: #3a3a3a;
     }
     header {
-      background-image: url('{{ header_image }}');
+      background-image: url('{{ page.header_image }}');
       background-size: cover;
       background-position: center;
       padding: 3rem 1.5rem;
@@ -57,7 +57,7 @@
 </head>
 <body>
   <header>
-    <h1>{{ title }}</h1>
+    <h1>{{ page.title }}</h1>
   </header>
 
   <div class="layout">
@@ -65,7 +65,7 @@
       {% if page.chapters and page.chapters != empty %}  
       <h3>Kapitel</h3>
       <ul>
-        {% for chapter in chapters %}
+        {% for chapter in page.chapters %}
           <li><a href="#{{ chapter.id }}">{{ chapter.title }}</a></li>
         {% endfor %}
       </ul>
@@ -74,7 +74,7 @@
       <hr>
       <h3>Sourcecode</h3>
       <ul>
-        {% for file in code_files %}
+        {% for file in page.code_files %}
           <li><a href="{{ file.path }}">{{ file.name }}</a></li>
         {% endfor %}
       </ul>
@@ -84,12 +84,12 @@
     <main>
       <div class="summary">
         <strong>Kurzfassung:</strong>
-        <p>{{ summary }}</p>
+        <p>{{ page.summary | markdownify }}</p>
       </div>
 
       {% if page.description %}
       <div class="description">
-      {{ page.description }}
+      {{ page.description | markdownify }}
       </div>
       {% endif %}
 
