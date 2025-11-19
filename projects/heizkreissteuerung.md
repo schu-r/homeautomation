@@ -2,7 +2,7 @@
 layout: project
 title: "Heizkreissteuerung aber richtig"
 header_image: "https://www.energie-experten.org/fileadmin/_processed_/f/8/csm_Heizungstechnik_Heizungskreislauf_Pumpengruppe_DN_20-Serie_Foto_Watts_Water_Technologies_c81fa1fedc.jpg"
-summary: "MMeine Heizkreise laufen nicht mehr nach dem Motto „ein Raumfühler für alle“, sondern über eine eigene ESPHome-Regelung mit PID, DS18B20, DHT22, Zigbee-Ventilen und HomeAssistant. Jeder Stock bekommt Wärme nach echtem Bedarf, Sonneneinstrahlung und Holzofen inklusive. Präzise, zonenbasiert, komplett lokal. #SmartHome #HomeAssistant #ESPhome #Heiztechnik #DIYTech #OpenSource #Automation"
+summary: "Meine Heizkreise laufen nicht mehr nach dem Motto „ein Raumfühler für alle“, sondern über eine eigene ESPHome-Regelung mit PID, DS18B20, DHT22, Zigbee-Ventilen und HomeAssistant. Jeder Stock bekommt Wärme nach echtem Bedarf, Sonneneinstrahlung und Holzofen inklusive. Präzise, zonenbasiert, komplett lokal. #SmartHome #HomeAssistant #ESPhome #Heiztechnik #DIYTech #OpenSource #Automation"
 code_files:
   - name: "ESPHome Heizkreise"
     path: "https://github.com/schu-r/homeautomation/blob/main/source/heizkreis-esphome.yaml"
