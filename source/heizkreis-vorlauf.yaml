@@ -1,0 +1,35 @@
+alias: UG Vorlauftemperatur regeln nach Außentemperatur
+description: Stellt den Vorlauf der Fußbodenheizung anhand Außentemperatur ein
+triggers:
+  - minutes: /1
+    trigger: time_pattern
+conditions: []
+actions:
+  - variables:
+      temp_out_warm: 15
+      vorlauf_warm: 35
+      temp_out_cold: -10
+      vorlauf_cold: 50
+      outside: "{{ states('sensor.gw1100a_outdoor_temperature') | float(10) }}"
+      raum_ist: "{{ states('sensor.temperatur_unten') | float(20) }}"
+      raum_soll: "{{ states('input_number.ug_solltemperatur') | float(21) }}"
+      faktor: 5
+      vorlauf_basis: |
+        {% if outside >= temp_out_warm %}
+          {{ vorlauf_warm }}
+        {% elif outside <= temp_out_cold %}
+          {{ vorlauf_cold }}
+        {% else %}
+          {{ (vorlauf_warm
+              + (temp_out_warm - outside) / (temp_out_warm - temp_out_cold)
+              * (vorlauf_cold - vorlauf_warm)) | round(1) }}
+        {% endif %}
+      delta: "{{ raum_soll - raum_ist }}"
+      anpassung: "{{ (delta * faktor) | round(1) }}"
+      vorlauf: "{{ (vorlauf_basis + anpassung) | round(1) }}"
+  - target:
+      entity_id: number.heizung_vorlauf_hochtemperatur
+    data:
+      value: "{{ vorlauf }}"
+    action: number.set_value
+mode: single
