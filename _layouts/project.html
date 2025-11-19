@@ -78,7 +78,7 @@
       <h3>Kapitel</h3>
       <ul>
         {% for chapter in page.chapters %}
-          <li><a href="#{{ chapter.id }}">{{ chapter.title }}</a></li>
+          <li><a href="{{ chapter.id }}">{{ chapter.title }}</a></li>
         {% endfor %}
       </ul>
       {% endif %}
