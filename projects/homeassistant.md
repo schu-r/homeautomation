@@ -1,7 +1,7 @@
 ---
 layout: project
 title: "HomeAssistant – Das Herz meines Smart Homes"
-header_image: "/images/home-assistant-wordmark-color-on-light.webp"
+header_image: "https://community-assets.home-assistant.io/original/4X/f/a/d/fad6bb6b06f258b12fe4e2d931ec6beeeb141778.jpeg"
 summary: "Ich nutze [HomeAssistant](https://www.home-assistant.io/) in meinem Haus, um alles zu steuern – flexibel, Open Source und lokal. Sensoren, Licht, Heizung: alles vernetzt, alles unter meiner Kontrolle. Mehr dazu auf meiner Seite! #HomeAutomation #OpenSource #SmartHome"
 
 ---
