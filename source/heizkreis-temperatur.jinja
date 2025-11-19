@@ -1,0 +1,32 @@
+{% set tolerance = 2.5 %}              {# Max. Abweichung vom Median, um als gültig zu gelten #}
+{% set fallback_temp = 21 %}          {# Fallback, falls Sensorwert nicht lesbar ist #}
+{% set unavailable_output = 'unavailable' %}  {# Was zurückgegeben wird, wenn nichts verwertbar ist #}
+
+
+{% set raw_temps = [
+    state_attr('climate.heizung_buero_thermostat', 'current_temperature')| float(fallback_temp),
+    state_attr('climate.heizung_kuche_thermostat', 'current_temperature')| float(fallback_temp),
+    state_attr('climate.ug_esszimmer_thermostat', 'current_temperature')| float(fallback_temp),
+    state_attr('climate.ug_wohnzimmer_thermostat', 'current_temperature')| float(fallback_temp),
+    states('sensor.esszimmerunten_temperature') | float(fallback_temp)
+] | select('number') | list %}
+
+
+          
+{# --- Median berechnen --- #}
+{% set sorted = raw_temps | sort %}
+{% set count = sorted | count %}
+
+
+  {% set median = (
+    sorted[(count // 2)] if count is odd
+    else ((sorted[(count // 2) - 1] + sorted[(count // 2)]) / 2)
+  ) %}
+
+{% set filtered = raw_temps  %}
+
+{% if filtered | count > 0 %}
+{{ (filtered|sum / filtered|count) |round(2)  }}
+{% else %}
+    {{ unavailable_output }}
+  {% endif %}

@@ -1,0 +1,196 @@
+alias: "Set Max Load "
+description: ""
+triggers:
+  - trigger: time_pattern
+    seconds: /15
+conditions:
+  - type: is_plugged_in
+    condition: device
+    device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+    entity_id: 138fa09aac96d1334e7e63912d0a14de
+    domain: binary_sensor
+actions:
+  - if:
+      - condition: state
+        entity_id: input_boolean.laden_freigabe
+        state: "off"
+    then:
+      - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+        domain: select
+        entity_id: 643a962222cab572ae72adb2d75bd796
+        type: select_option
+        option: "1"
+    else:
+      - if:
+          - condition: state
+            entity_id: input_boolean.e_auto_powerload
+            state: "on"
+        then:
+          - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+            domain: select
+            entity_id: 643a962222cab572ae72adb2d75bd796
+            type: select_option
+            option: "0"
+          - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+            domain: select
+            entity_id: c34de5595b1d580a47c5361710b39e91
+            type: select_option
+            option: "2"
+          - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+            domain: number
+            entity_id: c1c9d9710328b16928aaeb187f45c666
+            type: set_value
+            value: 16
+        else:
+          - if:
+              - condition: state
+                entity_id: input_boolean.laden_mit_3p
+                state: "on"
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: select
+                entity_id: c34de5595b1d580a47c5361710b39e91
+                type: select_option
+                option: "2"
+            else:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: select
+                entity_id: c34de5595b1d580a47c5361710b39e91
+                type: select_option
+                option: "1"
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.loader_amps
+                below: 7
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: number
+                entity_id: c1c9d9710328b16928aaeb187f45c666
+                type: set_value
+                value: 6
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.loader_amps
+                above: 6
+                below: 8
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: number
+                entity_id: c1c9d9710328b16928aaeb187f45c666
+                type: set_value
+                value: 7
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.loader_amps
+                above: 7
+                below: 9
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: number
+                entity_id: c1c9d9710328b16928aaeb187f45c666
+                type: set_value
+                value: 8
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.loader_amps
+                above: 8
+                below: 10
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: number
+                entity_id: c1c9d9710328b16928aaeb187f45c666
+                type: set_value
+                value: 9
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.loader_amps
+                above: 9
+                below: 11
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: number
+                entity_id: c1c9d9710328b16928aaeb187f45c666
+                type: set_value
+                value: 10
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.loader_amps
+                above: 10
+                below: 12
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: number
+                entity_id: c1c9d9710328b16928aaeb187f45c666
+                type: set_value
+                value: 11
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.loader_amps
+                above: 11
+                below: 13
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: number
+                entity_id: c1c9d9710328b16928aaeb187f45c666
+                type: set_value
+                value: 12
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.loader_amps
+                above: 12
+                below: 14
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: number
+                entity_id: c1c9d9710328b16928aaeb187f45c666
+                type: set_value
+                value: 13
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.loader_amps
+                above: 13
+                below: 15
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: number
+                entity_id: c1c9d9710328b16928aaeb187f45c666
+                type: set_value
+                value: 14
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.loader_amps
+                above: 14
+                below: 16
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: number
+                entity_id: c1c9d9710328b16928aaeb187f45c666
+                type: set_value
+                value: 15
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.loader_amps
+                above: 15
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: number
+                entity_id: c1c9d9710328b16928aaeb187f45c666
+                type: set_value
+                value: 16
+          - if:
+              - condition: state
+                entity_id: input_boolean.autoladenminpower
+                state: "on"
+            then:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: select
+                entity_id: 643a962222cab572ae72adb2d75bd796
+                type: select_option
+                option: "2"
+            else:
+              - device_id: 606b7ab15ba1d430abfcb70a4bfc181d
+                domain: select
+                entity_id: 643a962222cab572ae72adb2d75bd796
+                type: select_option
+                option: "1"
+mode: single

@@ -1,0 +1,649 @@
+esphome:
+  name: heizung
+  friendly_name: Heizung
+  on_boot: 
+    priority: -100
+    then:
+      - script.execute: mischer_init
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  
+
+ota:
+  - platform: esphome
+  - platform: web_server
+    
+    
+    
+  
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+
+
+
+web_server:
+  version: 3
+
+one_wire:
+  - platform: gpio
+    pin: GPIO13
+  
+
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    update_interval: 60s
+
+  - platform: dallas_temp
+    address: "0x5b000000382aec28"
+    name: Mischer1_vorlauf
+    id: Mischer1_vorlauf
+    update_interval: 10s
+  - platform: dallas_temp
+    address: "0xf50000003863df28"
+    name: Mischer1_ruecklauf
+    id: Mischer1_ruecklauf
+    update_interval: 30s
+  - platform: pulse_meter
+    pin: GPIO34
+    name: "Fussboden"
+    id: Fussboden
+    timeout: 10s
+    unit_of_measurement: 'Hz'
+    accuracy_decimals: 2
+    filters: 
+      - throttle_average: 10s
+          
+  - platform: template
+    name: "Fussboden L/min"
+    id: Fussboden_lpm
+    unit_of_measurement: "l/min"
+    lambda: |-
+      if (isnan(id(Fussboden).state)) return NAN;
+      return (id(Fussboden).state + 4.0) / 8.0;
+    update_interval: 10s
+    accuracy_decimals: 2
+  - platform: template
+    name: "Fussboden Wärme"
+    unit_of_measurement: "W"
+    lambda: |-
+      if (isnan(id(Mischer1_vorlauf).state) || isnan(id(Mischer1_ruecklauf).state) || isnan(id(Fussboden_lpm).state)) {
+        return NAN;
+      }
+      float deltaT = id(Mischer1_vorlauf).state - id(Mischer1_ruecklauf).state;
+      float leistung = id(Fussboden_lpm).state * 69.67 * deltaT;
+      return leistung;
+    update_interval: 60s
+    accuracy_decimals: 1
+
+
+  - platform: dallas_temp
+    address: "0x42000000351da328"
+    name: Mischer2_vorlauf
+    id: Mischer2_vorlauf
+    update_interval: 10s
+  - platform: dallas_temp
+    address: "0xd100000037fd8828"
+    name: Mischer2_ruecklauf
+    id: Mischer2_ruecklauf
+    update_interval: 30s
+  - platform: pulse_meter
+    pin: GPIO35
+    name: "Hochtemperatur"
+    id: Hochtemperatur
+    timeout: 10s
+    unit_of_measurement: 'Hz'
+    accuracy_decimals: 2
+    filters: 
+      - throttle_average: 10s
+  - platform: template
+    name: "Hochtemperatur L/min"
+    id: Hochtemperatur_lpm
+    unit_of_measurement: "l/min"
+    lambda: |-
+      if (isnan(id(Hochtemperatur).state)) return NAN;
+      return (id(Hochtemperatur).state + 4.0) / 8.0;
+    update_interval: 10s
+    accuracy_decimals: 2
+  - platform: template
+    name: "Hochtemperatur Wärme"
+    unit_of_measurement: "W"
+    lambda: |-
+      if (isnan(id(Mischer2_vorlauf).state) || isnan(id(Mischer2_ruecklauf).state) || isnan(id(Hochtemperatur_lpm).state)) {
+        return NAN;
+      }
+      float deltaT = id(Mischer2_vorlauf).state - id(Mischer2_ruecklauf).state;
+      float leistung = id(Hochtemperatur_lpm).state * 69.67 * deltaT;
+      return leistung;
+    update_interval: 60s
+    accuracy_decimals: 1
+
+  - platform: dallas_temp
+    address: "0x1234567812345648"
+    name: Warmwasser_vorlauf
+    id: Warmwasser_vorlauf
+    update_interval: 60s
+  - platform: dallas_temp
+    address: "0x1234567812345649"
+    name: Warmwasser_ruecklauf
+    id: Warmwasser_ruecklauf
+    update_interval: 60s
+  - platform: pulse_meter
+    pin: GPIO32
+    name: "Warmwasser"
+    id: Warmwasser
+    timeout: 10s
+    unit_of_measurement: 'Hz'
+    accuracy_decimals: 2
+    filters: 
+      - throttle_average: 10s
+  - platform: template
+    name: "Warmwasser L/min"
+    id: Warmwasser_lpm
+    unit_of_measurement: "l/min"
+    lambda: |-
+      if (isnan(id(Warmwasser).state)) return NAN;
+      return (id(Warmwasser).state + 4.0) / 8.0;
+    update_interval: 10s
+    accuracy_decimals: 2
+  - platform: template
+    name: "Warmwasser Wärme"
+    unit_of_measurement: "W"
+    lambda: |-
+      if (isnan(id(Warmwasser_vorlauf).state) || isnan(id(Warmwasser_ruecklauf).state) || isnan(id(Warmwasser_lpm).state)) {
+        return NAN;
+      }
+      float deltaT = id(Warmwasser_vorlauf).state - id(Warmwasser_ruecklauf).state;
+      float leistung = id(Warmwasser_lpm).state * 69.67 * deltaT;
+      return leistung;
+    update_interval: 60s
+    accuracy_decimals: 1
+
+  - platform: dallas_temp
+    address: "0x1234567812345658"
+    name: Heizung_vorlauf
+    id: Heizung_vorlauf
+    update_interval: 60s
+  - platform: dallas_temp
+    address: "0x1234567812345659"
+    name: Heizung_ruecklauf
+    id: Heizung_ruecklauf
+    update_interval: 60s
+  - platform: pulse_meter
+    pin: GPIO33
+    name: "Heizung"
+    id: Heizung
+    timeout: 10s
+    unit_of_measurement: 'Hz'
+    accuracy_decimals: 2
+    filters: 
+      - throttle_average: 10s
+  - platform: template
+    name: "Heizung L/min"
+    id: Heizung_lpm
+    unit_of_measurement: "l/min"
+    lambda: |-
+      if (isnan(id(Heizung).state)) return NAN;
+      return (id(Heizung).state + 4.0) / 8.0;
+    update_interval: 10s
+    accuracy_decimals: 2
+  - platform: template
+    name: "Heizung Wärme"
+    unit_of_measurement: "W"
+    lambda: |-
+      if (isnan(id(Heizung_vorlauf).state) || isnan(id(Heizung_ruecklauf).state) || isnan(id(Heizung_lpm).state)) {
+        return NAN;
+      }
+      float deltaT = id(Heizung_vorlauf).state - id(Heizung_ruecklauf).state;
+      float leistung = id(Heizung_lpm).state * 69.67 * deltaT;
+      return leistung;
+    update_interval: 60s
+    accuracy_decimals: 1
+
+  - platform: dallas_temp
+    address: "0x1234567812345668"
+    name: Solar_vorlauf
+    id: Solar_vorlauf
+    update_interval: 60s
+  - platform: dallas_temp
+    address: "0x1234567812345628"
+    name: Solar_ruecklauf
+    id: Solar_ruecklauf
+    update_interval: 60s
+  - platform: pulse_meter
+    pin: GPIO25
+    name: "Solar"
+    id: Solar
+    timeout: 10s
+    unit_of_measurement: 'Hz'
+    accuracy_decimals: 2
+    filters: 
+      - throttle_average: 10s
+  - platform: template
+    name: "Solar L/min"
+    id: Solar_lpm
+    unit_of_measurement: "l/min"
+    lambda: |-
+      if (isnan(id(Solar).state)) return NAN;
+      return (id(Solar).state + 4.0) / 8.0;
+    update_interval: 10s
+    accuracy_decimals: 2
+  - platform: template
+    name: "Solar Wärme"
+    unit_of_measurement: "W"
+    lambda: |-
+      if (isnan(id(Solar_vorlauf).state) || isnan(id(Solar_ruecklauf).state) || isnan(id(Solar_lpm).state)) {
+        return NAN;
+      }
+      float deltaT = id(Solar_vorlauf).state - id(Solar_ruecklauf).state;
+      float leistung = id(Solar_lpm).state * 69.67 * deltaT;
+      return leistung;
+    update_interval: 60s
+    accuracy_decimals: 1
+
+
+  
+
+  
+
+number:
+  - platform: template
+    name: "Vorlauf_Fussboden"
+    id: Vorlauf_Fussboden
+    optimistic: true
+    min_value: 20
+    max_value: 45
+    step: 1
+  - platform: template
+    name: "Vorlauf_Hochtemperatur"
+    id: Vorlauf_Hochtemperatur
+    optimistic: true
+    min_value: 30
+    max_value: 60
+    step: 1
+
+
+switch:
+  - platform: gpio
+    pin: GPIO21
+    name: "Mischer2 Auf"
+    id: Mischer2auf
+    inverted: True
+    interlock: [Mischer2zu]
+
+  - platform: gpio
+    pin: GPIO19
+    name: "Mischer2 Zu"
+    id: Mischer2zu
+    inverted: True
+    interlock: [Mischer2auf]
+
+  - platform: gpio
+    pin: GPIO18
+    name: "Mischer1 Auf"
+    id: Mischer1auf
+    inverted: True
+    interlock: [Mischer1zu]
+
+  - platform: gpio
+    pin: GPIO17
+    name: "Mischer1 Zu"
+    id: Mischer1zu
+    inverted: True
+    interlock: [Mischer1auf]
+
+  - platform: gpio
+    pin: GPIO23
+    name: "Pumpe1_Power"
+    id: pumpe1_power
+    inverted: True
+
+  - platform: gpio
+    pin: GPIO22
+    name: "Pumpe2_Power"
+    id: pumpe2_power
+    inverted: True
+  
+
+cover:
+  - platform: time_based
+    name: "Mischer1_mix"
+    id: Mischer1_mix
+
+    open_action:
+      - switch.turn_on: Mischer1auf
+
+    open_duration: 103s
+
+    close_action:
+      - switch.turn_on: Mischer1zu
+    close_duration: 103s
+
+    stop_action:
+      - switch.turn_off: Mischer1auf
+      - switch.turn_off: Mischer1zu
+
+
+  - platform: time_based
+    name: "Mischer2_mix"
+    id: Mischer2_mix
+
+    open_action:
+      - switch.turn_on: Mischer2auf
+
+    open_duration: 140s
+
+    close_action:
+      - switch.turn_on: Mischer2zu
+    close_duration: 140s
+
+    stop_action:
+      - switch.turn_off: Mischer2auf
+      - switch.turn_off: Mischer2zu
+
+
+output:
+  - platform: ledc
+    pin: GPIO16
+    frequency: 1000 
+    id: Pumpe2
+     
+
+  - platform: ledc
+    pin: GPIO4
+    frequency: 1000 
+    id: Pumpe1
+    
+script:
+
+  - id: mischer1_sicher_schliessen
+    mode: single
+    then:
+      - logger.log: "Mischer fährt sicher zu (übersteuert)"
+      - switch.turn_on: Mischer1zu  # Mischer fährt zu
+      - delay: 50s                  # Fahrzeit über Anschlag hinaus
+      - switch.turn_off: Mischer1zu
+  - id: mischer2_sicher_schliessen
+    mode: single
+    then:
+      - logger.log: "Mischer fährt sicher zu (übersteuert)"
+      - switch.turn_on: Mischer2zu  # Mischer fährt zu
+      - delay: 50s                  # Fahrzeit über Anschlag hinaus
+      - switch.turn_off: Mischer2zu
+  - id: mischer_init
+    mode: single
+    then:
+      - logger.log: "Mischer fahren zu Startposition"
+      - cover.control:
+          id: Mischer1_mix
+          position: 0.0
+      - cover.control:
+          id: Mischer2_mix
+          position: 0.0
+      - switch.turn_on: Mischer2zu  # Mischer fährt zu
+      - switch.turn_on: Mischer1zu  # Mischer fährt zu
+      - switch.turn_off: Mischer2auf
+      - switch.turn_off: Mischer1auf
+      - delay: 140s                  # Fahrzeit über Anschlag hinaus
+      - switch.turn_off: Mischer2zu
+      - switch.turn_off: Mischer1zu
+      - globals.set:
+          id: start
+          value: 'false'
+
+      
+
+  
+
+fan:
+  - platform: speed
+    output: Pumpe1
+    name: "Pumpe1"
+    on_turn_off: 
+      then:
+        - switch.turn_off: pumpe1_power 
+        - cover.close: Mischer1_mix
+        - delay: 140s
+        - script.execute: mischer1_sicher_schliessen
+    on_turn_on:
+      then:
+        - switch.turn_on: pumpe1_power
+        - cover.open: Mischer1_mix
+        - lambda: |-
+            // Auf 20% (0.2) setzen
+            auto call = id(Mischer1_mix).make_call();
+            call.set_position(20 / 100.0); // Cover erwartet 0..1
+            call.perform();
+    on_speed_set:
+      lambda: |-
+        // Der Fan bekommt speed 0..1
+        // Wir drehen es einfach um für den PWM-Ausgang
+        float pwm_value = 1.0 - x;
+        id(Pumpe1).set_level(pwm_value);
+  
+  - platform: speed
+    output: Pumpe2
+    name: "Pumpe2"
+    on_turn_off: 
+      then:
+        - switch.turn_off: pumpe2_power
+        - cover.close: Mischer2_mix
+        - delay: 140s       
+        - script.execute: mischer2_sicher_schliessen
+    on_turn_on:
+      then:
+        - switch.turn_on: pumpe2_power
+        - cover.open: Mischer2_mix
+        - lambda: |-
+            // Auf 20% (0.2) setzen
+            auto call = id(Mischer2_mix).make_call();
+            call.set_position(20 / 100.0); // Cover erwartet 0..1
+            call.perform();
+
+globals:
+  - id: Mischer1_integral
+    type: float
+    restore_value: yes
+    initial_value: '0.0'
+  - id: Mischer2_integral
+    type: float
+    restore_value: yes
+    initial_value: '0.0'
+  - id: start
+    type: bool
+    initial_value: 'true'
+
+interval:
+    - interval: 30s
+      then:
+        - if:
+            condition:
+              and:
+                - switch.is_on: pumpe1_power
+                - lambda: |-
+                    return !id(start);   // nur wenn start == false
+            then:
+              - lambda: |-
+                  float T = id(Mischer1_vorlauf).state;
+                  float set = id(Vorlauf_Fussboden).state;
+                  // === Sensorwerte ===
+                  const float last_out = id(Mischer1_mix).position * 100.0; // letzte Mischerstellung (%)
+
+                  // === Parameter ===
+                  const float Kp = 2.0;       // Proportionalanteil (Verstärkung)
+                  const float Ki = 0.002;      // Integrationsanteil (pro Sekunde)
+                  const float dt = 5.0;       // Abtastzeit in Sekunden (intervall!)
+                  const float min_out = 0.0;  // untere Grenze (%)
+                  const float max_out = 100.0;// obere Grenze (%)
+
+                  // === Regelabweichung ===
+                  const float error = set - T;
+
+                  // === Integrator (I-Anteil) ===
+                  static float integral = id(Mischer1_integral);
+                  integral += error * Ki * dt;
+
+                  // === Roh-Stellgröße ===
+                  float out_unlimited = last_out + (Kp * error) + integral;
+
+                  // === Begrenzen ===
+                  float out_limited = out_unlimited;
+                  if (out_limited > max_out) out_limited = max_out;
+                  if (out_limited < min_out) out_limited = min_out;
+
+                  // === Anti-Windup: Integrator einfrieren, wenn Sättigung erreicht ===
+                  if (out_unlimited != out_limited) {
+                    // Wenn an Grenze, Integrator nicht weiter aufbauen
+                    integral -= error * Ki * dt;
+                  }
+
+                  // --- Integrator wieder speichern ---
+                  id(Mischer1_integral) = integral;
+
+                  // === Stellwert setzen ===
+                  auto call = id(Mischer1_mix).make_call();
+                  call.set_position(out_limited / 100.0);
+                  call.perform();
+
+                  // === Logging ===
+                  ESP_LOGD("M1 - PI-Regler", "Soll=%.1f Ist=%.1f Diff=%.2f Out=%.1f%%", set, T, error, out_limited);
+                  /*
+                  float T = id(Mischer1_vorlauf).state;
+                  float set = id(Vorlauf_Fussboden).state;
+                  float error = set-T;  // positiv = zu kalt → Mischer auf
+                  float kp = 20.0;        // % pro °C, 5 °C Fehler = 100 %
+                  float out;
+
+                  // Deadband von ±0.2 °C
+                  if (abs(error) < 0.2) {
+                      // Innerhalb des Deadbands → keine Änderung
+                      out = id(Mischer1_mix).position * 100.0; // aktuelle Position in %
+                  } else {
+                      out = error * kp;
+                      if (out < 0) out = 0;
+                      if (out > 100) out = 100;
+                  }
+
+                  // Sanfte Stellgrößenänderung
+                  float last_out = id(Mischer1_mix).position * 100.0;
+                  float max_step = 5.0; // max. 5 % pro Intervall (z.B. 10 s)
+                  float diff = out - last_out;
+
+                  if (diff > max_step) out = last_out + max_step;
+                  if (diff < -max_step) out = last_out - max_step;
+
+                  auto call = id(Mischer1_mix).make_call();
+                  call.set_position(out / 100.0); // Cover erwartet 0..1
+                  call.perform();*/
+    - interval: 5s
+      then:
+        - if:
+            condition:
+              and:
+                - switch.is_on: pumpe2_power
+                - lambda: |-
+                    return !id(start);   // nur wenn start == false
+            then:
+              - lambda: |-
+                  // === Sensorwerte ===
+                  const float T = id(Mischer2_vorlauf).state;           // aktuelle Vorlauftemperatur
+                  const float set = id(Vorlauf_Hochtemperatur).state;   // Solltemperatur
+                  const float last_out = id(Mischer2_mix).position * 100.0; // letzte Mischerstellung (%)
+
+                  // === Parameter ===
+                  const float Kp = 2.0;       // Proportionalanteil (Verstärkung)
+                  const float Ki = 0.002;      // Integrationsanteil (pro Sekunde)
+                  const float dt = 5.0;       // Abtastzeit in Sekunden (intervall!)
+                  const float min_out = 0.0;  // untere Grenze (%)
+                  const float max_out = 100.0;// obere Grenze (%)
+
+                  // === Regelabweichung ===
+                  const float error = set - T;
+
+                  // === Integrator (I-Anteil) ===
+                  static float integral = id(Mischer2_integral);
+                  integral += error * Ki * dt;
+
+                  // === Roh-Stellgröße ===
+                  float out_unlimited = last_out + (Kp * error) + integral;
+
+                  // === Begrenzen ===
+                  float out_limited = out_unlimited;
+                  if (out_limited > max_out) out_limited = max_out;
+                  if (out_limited < min_out) out_limited = min_out;
+
+                  // === Anti-Windup: Integrator einfrieren, wenn Sättigung erreicht ===
+                  if (out_unlimited != out_limited) {
+                    // Wenn an Grenze, Integrator nicht weiter aufbauen
+                    integral -= error * Ki * dt;
+                  }
+
+                  // --- Integrator wieder speichern ---
+                  id(Mischer2_integral) = integral;
+
+                  // === Stellwert setzen ===
+                  auto call = id(Mischer2_mix).make_call();
+                  call.set_position(out_limited / 100.0);
+                  call.perform();
+
+                  // === Logging ===
+                  ESP_LOGD("M2 - PI-Regler", "Soll=%.1f Ist=%.1f Diff=%.2f Out=%.1f%%", set, T, error, out_limited);
+                  /*
+                  float T = id(Mischer2_vorlauf).state;
+                  float set = id(Vorlauf_Hochtemperatur).state;
+                  float error = set-T;  // positiv = zu kalt → Mischer auf
+                  float kp = 20.0;        // % pro °C, 5 °C Fehler = 100 %
+                  float out;
+
+                  // Deadband von ±0.2 °C
+                  if (abs(error) < 0.2) {
+                      // Innerhalb des Deadbands → keine Änderung
+                      out = id(Mischer2_mix).position * 100.0; // aktuelle Position in %
+                  } else {
+                      out = error * kp;
+                      if (out < 0) out = 0;
+                      if (out > 100) out = 100;
+                  }
+
+                  // Sanfte Stellgrößenänderung
+                  float last_out = id(Mischer2_mix).position * 100.0;
+                  float max_step = 5.0; // max. 5 % pro Intervall (z.B. 10 s)
+                  float diff = out - last_out;
+
+                  if (diff > max_step) out = last_out + max_step;
+                  if (diff < -max_step) out = last_out - max_step;
+
+                  auto call = id(Mischer2_mix).make_call();
+                  call.set_position(out / 100.0); // Cover erwartet 0..1
+                  call.perform();
+                  */
+
+button:
+  - platform: restart
+    name: "Restart"
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: ESP IP Address
+    ssid:
+      name: ESP Connected SSID
+    bssid:
+      name: ESP Connected BSSID
+    mac_address:
+      name: ESP Mac Wifi Address
+    scan_results:
+      name: ESP Latest Scan Results
+    

@@ -1,0 +1,1 @@
+{{ max(((states('sensor.stromuberschussmin')|float)/680) | round (0,'floor') ,0) }}
