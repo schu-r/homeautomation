@@ -3,9 +3,6 @@ layout: project
 title: "Kühlung im Sommer – Automatisch, clever, zuverlässig"
 header_image: "https://cdn.pixabay.com/photo/2018/07/29/21/16/heat-3571032_1280.jpg"
 summary: "Im Sommer kühlt mein Haus automatisch: Dachfenster, Raffstores, Lüftung und kleine Klimaanlage arbeiten zusammen – lokal, Open Source und zuverlässig. #SmartHome #HomeAutomation #ESPHome #DIY"
-code_files:
-  - name: "ESPHome Steuerung"
-    path: "https://github.com/schu-r/homeautomation/blob/main/source/raffstore.yaml"
 ---
 # Kühlung im Sommer – Automatisch, clever, zuverlässig
 
