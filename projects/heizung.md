@@ -1,7 +1,7 @@
 ---
 layout: project
 title: "Heizung mit Gehirm"
-header_image: "https://www.froeling.com/es-es/wp-content/uploads/sites/11/2023/04/Newsletter_PlusX_0423.png"
+header_image: "https://schu-r.github.io/homeautomation/images/pellet-8534567_1280.jpg"
 summary: "Ich habe mein komplettes Heizsystem modernisiert: neuer Pelletkessel, 1000-Liter-Puffer, optimierte Solarthermie, Frischwassermodul und zwei getrennte Heizkreise. Der Kessel regelt nur sich selbst, Puffer und Solar. Die Heizkreise steuere ich mit eigener Sensorik und HomeAssistant, weil ein einziger Raumfühler und starre Logik einfach zu grob sind. Seit Sommer 2025 läuft das System effizient, sonnensynchron und endlich so, wie es zu meinem Haus passt."
 chapters:
   - id: heizung-warmwasser
