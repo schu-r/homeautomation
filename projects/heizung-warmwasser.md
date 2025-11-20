@@ -1,7 +1,7 @@
 ---
 layout: project
 title: "Warmwasser: Frischwassermodul & Zirkulation"
-header_image: "https://cdn.pixabay.com/photo/2016/07/19/22/54/faucet-1529179_1280.jpg"
+header_image: "https://schu-r.github.io/homeautomation/images/water-tap-1529179_1280.jpg"
 summary: "Neue Zirkulationspumpe aktiviert sich automatisch, sobald das Frischwassermodul Warmwasser anfordert. HomeAssistant steuert das Ganze so, dass nach einer Minute die Leitungen heiß sind, ohne dauernd Energie zu verbraten. Warmwasser sofort, ohne Verschwendung."
 
 ---
