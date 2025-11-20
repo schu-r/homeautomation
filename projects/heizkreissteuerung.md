@@ -16,6 +16,9 @@ Die neue Pelletheizung bekam einen Pufferspeicher, doch die Regelung für die be
 
 Die eigentliche Heizung darf tun, was Heizungen eben tun. Aber die beiden Heizkreise wollte ich selbst kontrollieren, denn die Standardlösung mit einem einzigen Raumfühler pro Stockwerk ist bei unserem Haus schlicht unbrauchbar. Oben heizt die Sonne das halbe Stockwerk gratis auf, unten sorgt der Holzofen meiner Schwiegermutter für Verwirrung bei der Heizung. Eine zentrale Messung hätte völlig falsche Signale geliefert.
 
+## Problem
+Alles auf einen Raum bezogen ist komplett falsch. Aber die Heizung hat keine andere Möglichkeit. Zusätzlich weiiß ich nicht, wie viel Wärme gebraucht wird. Warum wird der Heizkörper nicht warm obwohl es überall kalt ist? Warum heizt die Heizung obwol die Sonne reinknallt? Die Heizung soll steuern wie viel Wärme wir brauchen und zwar nicht nach Zeitplan sondern nach anwesenheit. Ein schönes, warmes Haus, aber wenn keiner daheim ist, werfe ich die Pellets beim Fenster raus.
+
 ## ESPHome Übernimmt  
 Also habe ich die komplette Regelung ausgelagert: Ein ESP32 mit ESPHome übernimmt jeden Mischer und die jeweilige Pumpe. Vor- und Rücklauf werden über DS18B20 überwacht. Die Regler laufen lokal am ESP über einen PI-Algorithmus, der feinfühlig auf Änderungen reagiert und den Mischer exakt dort hält, wo die Temperatur hinkommen soll. Die Vorgabewerte und die tatsächliche Heizanforderung liefert HomeAssistant, doch die schnelle, saubere Regelarbeit passiert direkt am Gerät.
 
@@ -30,6 +33,9 @@ Beide Heizkreise berechnen eine Durchschnittstemperatur, aber dynamisch: Räume,
 
 ## Solltemperatur für Vorlauf
 Belibt nur noch die Temperatur für den Vorlauf zu bestimmen. Der wird einerseits über die Außentemperatur bestimmt aber auch mit der Differrenz wischen ist und Soll. Je mehr abweichung desto wärmer das System, damit es richtig einheizt.
+
+## Anwesenheits und Zeibasierte Steuereung
+Wenn in der Früh alle in die Arbeit und Schule fahren, den ganzen Tag keiner daheim ist, dann braucht die Heizung nicht zu arbeiten. Also eine Absenktemperatur einstellen. In der Früh wird entschieden ob jemand daheim ist und dann die richtige Temperatur eingestellt. Sollte jemand heimkommen wird natürlich sofort hochgefahren. Dabei geht es um eine Temperaturdifferenz von 1.5°C - Also nichts Weltbewegendes. Im Unteren Stock passiert es immer wieder das alle für ein halben Tag wegfahren. Das aber nicht zu fixen Zeiten. Ist länger keiner daheim, dann runter mit der Temperatur. Natürlich gibt es noch die normale Nachtabsenkung. 
 
 Am Ende entsteht ein System, das nicht schaltet wie ein dummer Zentralthermostat, sondern wie ein fein abgestimmtes Netz aus Sensoren, Regelungstechnik und Logik. Die Heizung liefert Wärme, aber die Verteilung und Dosierung übernimmt eine selbst entwickelte Steuerung, die genau weiß, wer gerade wie viel braucht.
 
