@@ -8,6 +8,9 @@ summary: "Neue Zirkulationspumpe aktiviert sich automatisch, sobald das Frischwa
 # Warmwasser: Frischwassermodul & Zirkulation
 Das Frischwassermodul liefert Warmwasser, sobald der Puffer genug Energie hat. In der Praxis reicht das aber nicht, wenn die Zirkulationsleitung schläft. Die war zwar schon beim Hausbau vorgesehen, aber ihre Pumpe war damals defekt und niemand kümmerte sich weiter darum.
 
+## Problem
+Wir haben extrem lange Leitungen und es dauert lange bis das Warme Wasser in alle Ecken kommt. Wir hatten schon eine Zirkulationspumpe aber di eist mit einer Zeitschltuhr gelaufen. Gewohnheiten verschieben sich. Braucht man warmes Wasser zum Kochen? Oder zum Abwaschen? Sonntag ist garantiert anders. Wann wird geduscht? Warum läuft die Pumpe obwohl keiner daheim ist. 
+
 ## Zirkulation
 Jetzt arbeitet dort eine neue, kleine Zirkulationspumpe. Ein Shelly misst ihren Verbrauch, ein weiterer den des Frischwassermoduls. Sobald das Frischwassermodul Strom zieht (also jemand Warmwasser anfordert), schaltet HomeAssistant die Zirkulationspumpe für eine Minute ein, aber nur wenn sie in den letzten 30 Minuten nicht bereits lief.
 
