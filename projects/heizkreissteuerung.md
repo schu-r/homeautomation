@@ -24,6 +24,7 @@ Also habe ich die komplette Regelung ausgelagert: Ein ESP32 mit ESPHome übernim
 
 ## Pumpe mit PWM
 Die Pumpen laufen nicht stumpf konstant. Sie orientieren sich an der Temperaturdifferenz zwischen Vor- und Rücklauf. Wird viel Wärme abgenommen, steigt die Pumpendrehzahl, sinkt der Bedarf, fährt sie wieder herunter. Dadurch reagiert der Heizkreis schneller, effizienter und schont obendrein Material und Strom.
+*VORSICHT* Pumpen haben komosche PWM 0% = 100% Drehzal und umgekehert, Aber das ist je nach Pumpe unterschiedlich und kann sogar konfiguriert werden (nicht bei allen) PWM-Heizsteuereung und PWM-Solarsteuerung. Anfangs bekam ich nur Warmwasser wenn ich die Pumpen auf 1% runterregelte. Das War verwirrend. 
 
 ## Raumtemperatur messen
 Im Obergeschoss habe ich das System schon länger vorbereitet: In vielen Räumen messen DHT22-Module die Temperatur, ein eigener ESP steuert die Ventile der Fußbodenheizung. Dadurch bekommt der Heizkreis eine echte, zonenbasierte Rückmeldung über den tatsächlichen Bedarf.  
@@ -38,6 +39,15 @@ Belibt nur noch die Temperatur für den Vorlauf zu bestimmen. Der wird einerseit
 Wenn in der Früh alle in die Arbeit und Schule fahren, den ganzen Tag keiner daheim ist, dann braucht die Heizung nicht zu arbeiten. Also eine Absenktemperatur einstellen. In der Früh wird entschieden ob jemand daheim ist und dann die richtige Temperatur eingestellt. Sollte jemand heimkommen wird natürlich sofort hochgefahren. Dabei geht es um eine Temperaturdifferenz von 1.5°C - Also nichts Weltbewegendes. Im Unteren Stock passiert es immer wieder das alle für ein halben Tag wegfahren. Das aber nicht zu fixen Zeiten. Ist länger keiner daheim, dann runter mit der Temperatur. Natürlich gibt es noch die normale Nachtabsenkung. 
 
 Am Ende entsteht ein System, das nicht schaltet wie ein dummer Zentralthermostat, sondern wie ein fein abgestimmtes Netz aus Sensoren, Regelungstechnik und Logik. Die Heizung liefert Wärme, aber die Verteilung und Dosierung übernimmt eine selbst entwickelte Steuerung, die genau weiß, wer gerade wie viel braucht.
+
+## Update #1
+Neuer Modus: *PAUSE*: Die Pumpe wird sonst zwischen 50% und 100% gesteuert. Im Pause Modus regelt er auf 1% runter. Warum? Weil mir der Heizkreis sonst den Puffer ausleert und der Kessel in einen kalter Puffer reintransportiert. Das mag er nicht. Also wird auf Pause geschaltet wenn der Puffer 3° nidriger als die gewünschte Vorlauftemperatur ist.  
+
+## Update #2
+Bis jetzt lief alles prima, aber auf einmal versagte eine Pumpe. Egal was ich in der PWM einstellte, die Pumpe willte nicht. DAzu muss man sagen habe ich das PWM Signal des ESP mit einer Brücke (L298N) auf 5V raufgeboostet. Wenn der aber keine Spannug hatte liefe es wieder. Also mal die Pumpe direkt am ESP angeschlossen und siehe da das Datenblatt hatte gelogen mit 3.3V geht es auch. 
+Tja bis ich merkte, dass auch die zweite Pumpe komische sachen machte und die Brücke recht heiß lief. 
+Die Untersuchung ergab, dass sich eine Ader gelöst hatte und die beiden Ausgänge kurz geschlossen hatte. Darum mwollte die erste Pumpe nicht mehr. Die 2. Pumpe ging dann, aber wenn am freien eingang der 2. pumpe ein Signal empfangen wurde kam der Kurzschkuss wieder zu tragen.
+*Lösung*: Brucke wurde ausgetauscht (mit Pins und Stecker versehen) und den Kabeln habe ich noch einen 1.5K Widerstand gegeben so dass das ganze kurzschlussfest wird. - Tja man lernt ....
 
 
 Der Sourcecode (soweit ich es expoertieren konnte) ist links erhältlich!
